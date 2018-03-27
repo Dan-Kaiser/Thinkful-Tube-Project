@@ -1,36 +1,35 @@
-//EXAMPLE CODE
 
-const GITHUB_SEARCH_URL = 'https://api.github.com/search/repositories';
+var YOUTUBE_ENDPOINT = 'https://www.googleapis.com/youtube/v3/search';
 
 function getDataFromApi(searchTerm, callback) {
-  const query = {
-    q: `${searchTerm} in:name`,
-    per_page: 5
+  var query = {
+    part: 'snippet',
+    key: 'AIzaSyDJzeYQZK5q4CIdrjORkD7gJmhhrrWnedc',
+    q: searchTerm
   }
-  $.getJSON(GITHUB_SEARCH_URL, query, callback);
+  console.log($.getJSON(YOUTUBE_ENDPOINT, query, callback));
 }
 
 function renderResult(result) {
   return `
     <div>
-      <h2>
-      <a class="js-result-name" href="${result.html_url}" target="_blank">${result.name}</a> by <a class="js-user-name" href="${result.owner.html_url}" target="_blank">${result.owner.login}</a></h2>
-      <p>Number of watchers: <span class="js-watchers-count">${result.watchers_count}</span></p>
-      <p>Number of open issues: <span class="js-issues-count">${result.open_issues}</span></p>
+      <a href="https://www.youtube.com/watch?v=${result.id.videoId}"target="_blank">
+      <img src=${result.snippet.thumbnails.default.url}>
+      </a>
     </div>
   `;
 }
 
 function displayGitHubSearchData(data) {
-  const results = data.items.map((item, index) => renderResult(item));
+  var results = data.items.map((item, index) => renderResult(item));
   $('.js-search-results').html(results);
 }
 
 function watchSubmit() {
-  $('.js-search-form').submit(event => {
+  $('.js-search-form').submit(function(event) {
     event.preventDefault();
-    const queryTarget = $(event.currentTarget).find('.js-query');
-    const query = queryTarget.val();
+    var queryTarget = $(event.currentTarget).find('.js-query');
+    var query = queryTarget.val();
     // clear out the input
     queryTarget.val("");
     getDataFromApi(query, displayGitHubSearchData);
