@@ -20,8 +20,10 @@ function renderResult(result) {
   `;
 }
 
-function displayGitHubSearchData(data) {
-  var results = data.items.map((item, index) => renderResult(item));
+function displayYouTubeSearchData(data) {
+  var results = data.items.map(function(item, index) {
+    return renderResult(item)
+  });
   $('.js-search-results').html(results);
 }
 
@@ -32,7 +34,7 @@ function watchSubmit() {
     var query = queryTarget.val();
     // clear out the input
     queryTarget.val("");
-    getDataFromApi(query, displayGitHubSearchData);
+    getDataFromApi(query, displayYouTubeSearchData);
   });
 }
 
